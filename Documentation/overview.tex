@@ -1,0 +1,66 @@
+\documentclass[10pt]{article}
+
+%\usepackage[sc]{mathpazo}
+%\linespread{1.05}         % Palatino needs more leading (space between lines)
+%\usepackage[T1]{fontenc}
+
+%\usepackage[scaled=1.00]{helvet}	% set Helvetica as the sans-serif font
+%\renewcommand{\rmdefault}{ptm}		% set Times as the default text font
+
+%\usepackage{amsmath,fancyhdr}	
+%\usepackage[left=1.25in,right=1.25in,top=1.25in,bottom=1.25in]{geometry}
+%\usepackage{amsfonts,amssymb,caption,graphicx,hyperref,mathtools,subcaption,xcolor}
+%\usepackage{algpseudocode}
+%\usepackage{algorithm}
+%\usepackage{bm}
+ 
+\usepackage{amsmath, amssymb, blindtext, bm, dblfloatfix, fancyhdr, float, graphicx, mathtools}
+%\usepackage{mathptmx}      % use Times fonts if available on your TeX system
+\usepackage[margin=1.50in]{geometry}
+\usepackage{chngcntr}
+\usepackage{amsthm}
+\usepackage[space]{grffile}
+
+\renewcommand*\rmdefault{pag}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+\makeatletter
+        \newcommand{\rightorleftmark}{%
+	\begingroup\protected@edef\x{\rightmark}%
+	\ifx\x\@empty
+    		\endgroup\nouppercase{\leftmark}
+	\else
+    		\endgroup\rightmark
+  	\fi}
+\makeatother
+
+\makeatletter
+	\begingroup
+  		\catcode`\_=\active
+  		\protected\gdef_{\@ifnextchar|\subtextup\sb}
+ 	\endgroup
+	\def\subtextup|#1|{\sb{\textup{#1}}}
+	\AtBeginDocument{\catcode`\_=12 \mathcode`\_=32768}
+\makeatother
+
+\pagestyle{fancyplain}
+\fancyhf{}
+\rhead{ \fancyplain{}{\nouppercase\rightorleftmark} }
+\cfoot{ \fancyplain{}{\thepage} }
+\renewcommand{\footrulewidth}{0.4pt}
+
+\allowdisplaybreaks
+
+\numberwithin{equation}{section}
+
+\counterwithin{figure}{section}
+
+\newtheorem{theorem}{Theorem}[section]
+
+\title{Mathematical Overview of the Stokes Equation}
+\author{Justin Dong \& Michael Franco}
+
+\begin{document}
+	\maketitle
+\end{document}
