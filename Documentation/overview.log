@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  5 APR 2016 21:16
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  5 APR 2016 21:35
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -402,11 +402,11 @@ view.aux) )
 Here is how much of TeX's memory you used:
  4102 strings out of 493315
  58116 string characters out of 6137904
- 127915 words of memory out of 5000000
+ 128915 words of memory out of 5000000
  7448 multiletter control sequences out of 15000+600000
  24870 words of font info for 69 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 36i,10n,43p,259b,212s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 36i,10n,43p,259b,210s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2013/texmf-dist/fonts/enc/dvips/base/8r.enc}</us
 r/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr
 /local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/
@@ -416,7 +416,7 @@ cal/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local
 texlive/2013/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/lo
 cal/texlive/2013/texmf-dist/fonts/type1/urw/avantgar/uagd8a.pfb></usr/local/tex
 live/2013/texmf-dist/fonts/type1/urw/avantgar/uagk8a.pfb>
-Output written on overview.pdf (1 page, 60457 bytes).
+Output written on overview.pdf (1 page, 62238 bytes).
 PDF statistics:
  41 PDF objects out of 1000 (max. 8388607)
  29 compressed objects within 1 object stream
