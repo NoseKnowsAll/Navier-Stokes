@@ -109,11 +109,26 @@
 	\end{align}
 	
 	\noindent Putting $\eqref{eq:bilinear form}$ and $\eqref{eq:linear form}$ together, we have the following: find $u\in H^{s}(\mathcal{M}_{h}),\;s>3/2$ such that for all $v\in H^{s}(\mathcal{M}_{h})$, we have:
-	\begin{equation*}
-		a_{\epsilon}(u,v) = \ell(v)
-	\end{equation*}
+	\begin{equation}
+		a_{\epsilon}(u,v) = \ell(v) \label{eq:discrete form}
+	\end{equation}
 	
 	\subsection{Implementation}
+	Let $u_{h}$ be the discontinuous Galerkin solution to $\eqref{eq:discrete form}$. We have
+	\begin{equation*}
+		u_{h} = \sum_{E\in\mathcal{M}_{h}}\sum_{i}c_{i}^{E}\phi_{i}^{E}
+	\end{equation*}
+	
+	\noindent where $\phi_{i}^{E} \in H^{s}(\mathcal{M}_{h})$ denotes the $i^{\text{th}}$ basis function on the mesh element $E$ and $c_{i}^{E}$, its coefficient. Essentially, the discontinuous Galerkin solution on each element is a linear combination of the basis functions on that mesh element. 
+	
+	The basis functions are predetermined by the user. For example, on a triangular mesh, we might choose Lagrange basis functions while on a quadrilateral mesh, we might choose Legendre basis functions. See \ref{Fenics} for an in-depth study of the other types of bases.
+	
+	On each mesh element, the basis functions are thus known, and the goal is to computer $c_{i}^{E}$. The discrete problem in $\eqref{eq:discrete form}$ then becomes a linear system:
+	\begin{equation*}
+		\mathbf{A}\cdot\mathbf{c} = \mathbf{b}
+	\end{equation*}
+	
+	\noindent where $\mathbf{A}$ is the global element matrix (to be assembled locally, or element-wise) corresponding to $a_{\epsilon}(u_{h},v_{h})$, $\mathbf{c}$ is the vector of basis function coefficients, and $\mathbf{b}$ is the global right-hand side (again assembled element-wise) corresponding to $\ell(v_{h})$.
 	
 	\section{Model Problem}
 	
