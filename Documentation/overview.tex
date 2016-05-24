@@ -66,6 +66,70 @@
 	
 	\section{Introduction}
 	
+	\section{Two-Dimensional Diffusion Problem}
+	\subsection{Weak Formulation and Broken Sobolev Spaces}
+	It may help to first motivate the problem by solving the second-order diffusion equation. Namely, let $\Omega \subseteq\mathbb{R}^{2}$ be a bounded Lipschitz domain. The boundary $\partial\Omega$ is partitioned into two disjoint sets, $\Gamma_{N}$ and $\Gamma_{D}$, and $\mathbf{n}$ denotes the unit normal vector to $\partial\Omega$. Then
+	\begin{align}
+		-\nabla\cdot(K\nabla u) + \alpha u = f \;\;\;&\text{in}\;\Omega\\
+		u = g_{D} \;\;\;&\text{on}\;\Gamma_{D}\\
+		K\nabla u\cdot\mathbf{n} = g_{N} \;\;\;&\text{on}\;\Gamma_{N}
+	\end{align}
+	
+	\noindent The weak formulation of this problem is as follows: given $w\in H_{0}^{1}(\Omega)$, we seek $u$ such that for all $v\in H_{0}^{1}(\Omega)$, we have
+	\begin{equation}
+		\int_{\Omega} (K\nabla w\cdot\nabla v + \alpha wv) = \int_{\Omega}fv - \int_{\Omega}\left(K\nabla u_{D}\cdot\nabla v + \alpha u_{D}v\right)
+	\end{equation}
+	
+	\noindent In the above relation, the first term is obtained by applying Green's Theorem to the Laplacian. Next, we partition the domain into a conforming mesh (the overlap between any two elements is at most a vertex or edge) $\mathcal{M}_{h}$. On this partition, we extend the definition of a Sobolev space by introducing the broken Sobolev space for any $s\in\mathbb{R}$:
+	\begin{equation}
+		H^{s}(\mathcal{M}_{h}) = \left\{v\in L^{2}(\Omega)\; :\;\forall E\in\mathcal{M}_{h},\;v|_{E}\in H^{s}(\Omega)\right\}
+	\end{equation}
+	
+	\noindent with the broken Sobolev norm:
+	\begin{equation}
+		||v||_{H^{s}(\mathcal{M}_{h})} = \left(\sum_{E\in\mathcal{M}_{h}}||v||^{2}_{H^{s}(E)}\right)^{1/2}
+	\end{equation}
+	
+	\noindent Note that the broken Sobolev norm simply says that the norm over the entire partition is the square root of the sums of the squares of the Sobolev norms piecewise across each element of the partition. In the case when $s=1$, we have:
+	\begin{equation}
+		||v||_{H^{1}(\mathcal{M}_{h})} = ||\nabla v||_{H^{0}(\mathcal{M}_{h})} = \left(\sum_{E\in\mathcal{M}_{h}}||\nabla v||^{2}_{L^{2}(E)}\right)^{1/2}
+	\end{equation}
+	
+	\subsection{Discrete Formulation}
+	We can define the bilinear form $a_{\epsilon}\;:\;H^{s}(\mathcal{M}_{h})\times H^{s}(\mathcal{M}_{h}) \to \mathbb{R}$:
+	\begin{align}
+		a_{\epsilon}(v,w) = &\sum_{E\in\mathcal{M}_{h}}\int_{E}\left(K\nabla v\cdot\nabla w + \alpha vw\right)\notag\\
+		 			     &- \sum_{e\in\Gamma_{h}^{i}\cup\Gamma_{D}}\int_{e}\left(\left\{K\nabla v\cdot\mathbf{n}_{e}\right\}[w] - \epsilon\left\{K\nabla w\cdot\mathbf{n}_{e}\right\}[v]\right)\notag\\
+					     &+\sum_{e\in\Gamma_{h}^{i}\cup\Gamma_{D}}\frac{\sigma_{e}}{|e|}\int_{e}[v][w]\label{eq:bilinear form}
+	\end{align}
+	
+	\noindent We also define the linear form $\ell\;:\;H^{s}(\mathcal{M}_{h}) \to \mathbb{R}$:
+	\begin{align}
+		\ell(v) = \sum_{E\in\mathcal{M}_{h}}\int_{E}fv + \sum_{e\in\Gamma_{D}}\int_{e}\left(K\nabla v\cdot\mathbf{n}_{e} + \frac{\sigma_{e}}{|e|}v\right)g_{D} + \sum_{e\in\Gamma_{N}}\int_{e}vg_{N}\label{eq:linear form}
+	\end{align}
+	
+	\noindent Putting $\eqref{eq:bilinear form}$ and $\eqref{eq:linear form}$ together, we have the following: find $u\in H^{s}(\mathcal{M}_{h}),\;s>3/2$ such that for all $v\in H^{s}(\mathcal{M}_{h})$, we have:
+	\begin{equation}
+		a_{\epsilon}(u,v) = \ell(v) \label{eq:discrete form}
+	\end{equation}
+	
+	\subsection{Implementation}
+	Let $u_{h}$ be the discontinuous Galerkin solution to $\eqref{eq:discrete form}$. We have
+	\begin{equation*}
+		u_{h} = \sum_{E\in\mathcal{M}_{h}}\sum_{i}c_{i}^{E}\phi_{i}^{E}
+	\end{equation*}
+	
+	\noindent where $\phi_{i}^{E} \in H^{s}(\mathcal{M}_{h})$ denotes the $i^{\text{th}}$ basis function on the mesh element $E$ and $c_{i}^{E}$, its coefficient. Essentially, the discontinuous Galerkin solution on each element is a linear combination of the basis functions on that mesh element. 
+	
+	The basis functions are predetermined by the user. For example, on a triangular mesh, we might choose Lagrange basis functions while on a quadrilateral mesh, we might choose Legendre basis functions. See \ref{Fenics} for an in-depth study of the other types of bases.
+	
+	On each mesh element, the basis functions are thus known, and the goal is to computer $c_{i}^{E}$. The discrete problem in $\eqref{eq:discrete form}$ then becomes a linear system:
+	\begin{equation*}
+		\mathbf{A}\cdot\mathbf{c} = \mathbf{b}
+	\end{equation*}
+	
+	\noindent where $\mathbf{A}$ is the global element matrix (to be assembled locally, or element-wise) corresponding to $a_{\epsilon}(u_{h},v_{h})$, $\mathbf{c}$ is the vector of basis function coefficients, and $\mathbf{b}$ is the global right-hand side (again assembled element-wise) corresponding to $\ell(v_{h})$.
+	
 	\section{Model Problem}
 	
 	Let $\Omega \subseteq \mathbb{R}^{2}$ be a bounded Lipschitz domain. For an incompressible viscous flow, the Stokes equations are:
